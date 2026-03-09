@@ -2,7 +2,7 @@
 
 A comprehensive, interactive guide to Linux concepts and commands, structured for progressive learning from basics to enterprise-level proficiency.
 
-🌐 **[View Live Website](https://yourusername.github.io/linux-mastery-guide/)**
+🌐 **[View Live Website](https://cmdnos.github.io/linux-mastery-guide/)**
 
 ## Features
 
@@ -37,14 +37,14 @@ A comprehensive, interactive guide to Linux concepts and commands, structured fo
    - Click Save
 
 4. **Access your website**:
-   - Your site will be published at: `https://yourusername.github.io/linux-mastery-guide/`
+   - Your site will be published at: `https://cmdnos.github.io/linux-mastery-guide/`
    - Wait 1-2 minutes for initial deployment
 
 ### Method 2: Using Git Command Line
 
 ```bash
 # Clone your repository
-git clone https://github.com/yourusername/linux-mastery-guide.git
+git clone https://github.com/cmdnos/linux-mastery-guide.git
 cd linux-mastery-guide
 
 # Add files
@@ -78,10 +78,10 @@ linux-mastery-guide/
 
 In `index.html`, find and replace:
 ```html
-<a href="https://github.com/yourusername/linux-mastery-guide">GitHub Repository</a>
+<a href="https://github.com/cmdnos/linux-mastery-guide">GitHub Repository</a>
 ```
 
-Replace `yourusername` with your actual GitHub username.
+Replace `cmdnos` with your actual GitHub username.
 
 ### Custom Domain (Optional)
 
