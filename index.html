@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linux Mastery Guide | Beginner to Enterprise Pro</title>
+    <meta name="description" content="A comprehensive guide to Linux concepts and commands, structured for progressive learning from basics to enterprise-level proficiency.">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --terminal-black: #0a0e14;
+            --terminal-green: #0cce6b;
+            --terminal-cyan: #00d9ff;
+            --terminal-yellow: #ffcc00;
+            --terminal-red: #ff3333;
+            --terminal-gray: #1e2430;
+            --terminal-light: #b3b1ad;
+            --terminal-white: #e6e1dc;
+            --accent-purple: #c678dd;
+            --accent-orange: #ff8800;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+            background: var(--terminal-black);
+            color: var(--terminal-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            animation: gridMove 20s linear infinite;
+        }
+        
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        /* Header */
+        header {
+            padding: 4rem 2rem 6rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::after {
+            content: '$ █';
+            position: absolute;
+            top: 20%;
+            right: 10%;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 15rem;
+            color: rgba(12, 206, 107, 0.05);
+            z-index: -1;
+            animation: blink 1.5s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+        
+        h1 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--terminal-green), var(--terminal-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideDown 0.8s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--terminal-light);
+            margin-bottom: 2rem;
+            animation: slideDown 0.8s ease-out 0.2s both;
+        }
+        
+        .terminal-prompt {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--terminal-green);
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            background: rgba(12, 206, 107, 0.1);
+            border: 2px solid var(--terminal-green);
+            border-radius: 8px;
+            font-size: 1.1rem;
+            animation: slideDown 0.8s ease-out 0.4s both;
+        }
+        
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(10, 14, 20, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-bottom: 2px solid var(--terminal-green);
+            z-index: 1000;
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        
+        nav a {
+            color: var(--terminal-cyan);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            border-color: var(--terminal-cyan);
+            background: rgba(0, 217, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        /* Main container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        
+        /* Level cards */
+        .level-section {
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+        
+        .level-section:nth-child(1) { animation-delay: 0.1s; }
+        .level-section:nth-child(2) { animation-delay: 0.2s; }
+        .level-section:nth-child(3) { animation-delay: 0.3s; }
+        .level-section:nth-child(4) { animation-delay: 0.4s; }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .level-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid;
+        }
+        
+        .level-beginner .level-header { border-color: var(--terminal-green); }
+        .level-intermediate .level-header { border-color: var(--terminal-cyan); }
+        .level-advanced .level-header { border-color: var(--terminal-yellow); }
+        .level-enterprise .level-header { border-color: var(--accent-purple); }
+        
+        .level-badge {
+            font-family: 'JetBrains Mono', monospace;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .level-beginner .level-badge {
+            background: rgba(12, 206, 107, 0.2);
+            color: var(--terminal-green);
+            border: 2px solid var(--terminal-green);
+        }
+        
+        .level-intermediate .level-badge {
+            background: rgba(0, 217, 255, 0.2);
+            color: var(--terminal-cyan);
+            border: 2px solid var(--terminal-cyan);
+        }
+        
+        .level-advanced .level-badge {
+            background: rgba(255, 204, 0, 0.2);
+            color: var(--terminal-yellow);
+            border: 2px solid var(--terminal-yellow);
+        }
+        
+        .level-enterprise .level-badge {
+            background: rgba(198, 120, 221, 0.2);
+            color: var(--accent-purple);
+            border: 2px solid var(--accent-purple);
+        }
+        
+        .level-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        /* Topic grid */
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .topic-card {
+            background: var(--terminal-gray);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .topic-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--terminal-green);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .level-intermediate .topic-card::before { background: var(--terminal-cyan); }
+        .level-advanced .topic-card::before { background: var(--terminal-yellow); }
+        .level-enterprise .topic-card::before { background: var(--accent-purple); }
+        
+        .topic-card:hover {
+            transform: translateX(8px);
+            border-color: var(--terminal-green);
+            box-shadow: 0 8px 24px rgba(12, 206, 107, 0.2);
+        }
+        
+        .level-intermediate .topic-card:hover {
+            border-color: var(--terminal-cyan);
+            box-shadow: 0 8px 24px rgba(0, 217, 255, 0.2);
+        }
+        
+        .level-advanced .topic-card:hover {
+            border-color: var(--terminal-yellow);
+            box-shadow: 0 8px 24px rgba(255, 204, 0, 0.2);
+        }
+        
+        .level-enterprise .topic-card:hover {
+            border-color: var(--accent-purple);
+            box-shadow: 0 8px 24px rgba(198, 120, 221, 0.2);
+        }
+        
+        .topic-card:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .topic-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--terminal-light);
+            margin-bottom: 0.5rem;
+        }
+        
+        .topic-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--terminal-white);
+        }
+        
+        .topic-description {
+            color: var(--terminal-light);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+        
+        .topic-commands {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .command-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(0, 217, 255, 0.1);
+            color: var(--terminal-cyan);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 4px;
+        }
+        
+        /* Command showcase */
+        .command-showcase {
+            background: var(--terminal-gray);
+            border: 2px solid var(--terminal-green);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 3rem 0;
+            position: relative;
+        }
+        
+        .command-showcase::before {
+            content: 'QUICK REFERENCE';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--terminal-black);
+            padding: 0 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--terminal-green);
+            font-weight: 600;
+        }
+        
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+        
+        .command-item {
+            font-family: 'JetBrains Mono', monospace;
+            padding: 0.75rem;
+            background: rgba(12, 206, 107, 0.05);
+            border-left: 3px solid var(--terminal-green);
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        
+        .command-item:hover {
+            background: rgba(12, 206, 107, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .command-name {
+            color: var(--terminal-green);
+            font-weight: 600;
+        }
+        
+        .command-desc {
+            color: var(--terminal-light);
+            font-size: 0.85rem;
+            margin-left: 1rem;
+        }
+        
+        /* Learning path */
+        .learning-path {
+            background: linear-gradient(135deg, rgba(12, 206, 107, 0.1), rgba(0, 217, 255, 0.1));
+            border: 2px solid var(--terminal-cyan);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .learning-path h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--terminal-cyan);
+        }
+        
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .timeline-item {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+        
+        .timeline-marker {
+            min-width: 80px;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 217, 255, 0.2);
+            border: 2px solid var(--terminal-cyan);
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .timeline-content {
+            flex: 1;
+        }
+        
+        .timeline-content h3 {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--terminal-white);
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-content p {
+            color: var(--terminal-light);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--terminal-gray);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 5rem;
+            border-top: 2px solid var(--terminal-green);
+        }
+        
+        footer p {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--terminal-light);
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        
+        .footer-links a {
+            color: var(--terminal-cyan);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--terminal-green);
+            text-decoration: underline;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .level-title {
+                font-size: 1.8rem;
+            }
+            
+            .topics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            nav {
+                gap: 1rem;
+            }
+            
+            header::after {
+                font-size: 8rem;
+                right: 5%;
+            }
+        }
+        
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--terminal-green);
+            color: var(--terminal-black);
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(100px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .scroll-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .scroll-top:hover {
+            background: var(--terminal-cyan);
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Linux Mastery Guide</h1>
+        <p class="subtitle">From Beginner to Enterprise Professional</p>
+        <div class="terminal-prompt">$ master-linux --comprehensive</div>
+    </header>
+    
+    <nav id="navbar">
+        <a href="#beginner">Beginner</a>
+        <a href="#intermediate">Intermediate</a>
+        <a href="#advanced">Advanced</a>
+        <a href="#enterprise">Enterprise</a>
+        <a href="#learning-path">Learning Path</a>
+        <a href="#resources">Resources</a>
+    </nav>
+    
+    <div class="container">
+        <!-- Beginner Level -->
+        <section id="beginner" class="level-section level-beginner">
+            <div class="level-header">
+                <span class="level-badge">LEVEL 1</span>
+                <h2 class="level-title">Beginner</h2>
+            </div>
+            <div class="topics-grid">
+                <div class="topic-card">
+                    <div class="topic-number">01</div>
+                    <h3 class="topic-title">File System Navigation</h3>
+                    <p class="topic-description">Master Linux directory structure and navigation</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">pwd</span>
+                        <span class="command-tag">ls</span>
+                        <span class="command-tag">cd</span>
+                        <span class="command-tag">tree</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">02</div>
+                    <h3 class="topic-title">File Operations</h3>
+                    <p class="topic-description">Create, copy, move, and delete files/directories</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">mkdir</span>
+                        <span class="command-tag">touch</span>
+                        <span class="command-tag">cp</span>
+                        <span class="command-tag">mv</span>
+                        <span class="command-tag">rm</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">03</div>
+                    <h3 class="topic-title">Viewing & Editing Files</h3>
+                    <p class="topic-description">Inspect and edit file contents efficiently</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">cat</span>
+                        <span class="command-tag">less</span>
+                        <span class="command-tag">tail</span>
+                        <span class="command-tag">nano</span>
+                        <span class="command-tag">vim</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">04</div>
+                    <h3 class="topic-title">File Permissions</h3>
+                    <p class="topic-description">Understand and manage user, group, and other permissions</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">chmod</span>
+                        <span class="command-tag">chown</span>
+                        <span class="command-tag">ls -l</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">05</div>
+                    <h3 class="topic-title">Getting Help</h3>
+                    <p class="topic-description">Access documentation and command information</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">man</span>
+                        <span class="command-tag">--help</span>
+                        <span class="command-tag">whatis</span>
+                        <span class="command-tag">apropos</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Intermediate Level -->
+        <section id="intermediate" class="level-section level-intermediate">
+            <div class="level-header">
+                <span class="level-badge">LEVEL 2</span>
+                <h2 class="level-title">Intermediate</h2>
+            </div>
+            <div class="topics-grid">
+                <div class="topic-card">
+                    <div class="topic-number">06</div>
+                    <h3 class="topic-title">Text Processing & Search</h3>
+                    <p class="topic-description">Pattern matching, regex, and text manipulation</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">grep</span>
+                        <span class="command-tag">find</span>
+                        <span class="command-tag">sort</span>
+                        <span class="command-tag">cut</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">07</div>
+                    <h3 class="topic-title">Redirection & Pipes</h3>
+                    <p class="topic-description">Chain commands and manage input/output streams</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">|</span>
+                        <span class="command-tag">></span>
+                        <span class="command-tag">>></span>
+                        <span class="command-tag">tee</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">08</div>
+                    <h3 class="topic-title">Process Management</h3>
+                    <p class="topic-description">Monitor, control, and manage system processes</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">ps</span>
+                        <span class="command-tag">top</span>
+                        <span class="command-tag">kill</span>
+                        <span class="command-tag">bg/fg</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">09</div>
+                    <h3 class="topic-title">Disk Management</h3>
+                    <p class="topic-description">Monitor disk usage and filesystem operations</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">df</span>
+                        <span class="command-tag">du</span>
+                        <span class="command-tag">mount</span>
+                        <span class="command-tag">lsblk</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">10</div>
+                    <h3 class="topic-title">Network Basics</h3>
+                    <p class="topic-description">Network interfaces, connectivity, and file transfer</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">ip addr</span>
+                        <span class="command-tag">ping</span>
+                        <span class="command-tag">curl</span>
+                        <span class="command-tag">scp</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">11</div>
+                    <h3 class="topic-title">Archives & Compression</h3>
+                    <p class="topic-description">Create and extract compressed archives</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">tar</span>
+                        <span class="command-tag">gzip</span>
+                        <span class="command-tag">zip</span>
+                        <span class="command-tag">unzip</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Advanced Level -->
+        <section id="advanced" class="level-section level-advanced">
+            <div class="level-header">
+                <span class="level-badge">LEVEL 3</span>
+                <h2 class="level-title">Advanced</h2>
+            </div>
+            <div class="topics-grid">
+                <div class="topic-card">
+                    <div class="topic-number">12</div>
+                    <h3 class="topic-title">Shell Scripting</h3>
+                    <p class="topic-description">Automate tasks with Bash scripts</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">if/else</span>
+                        <span class="command-tag">for/while</span>
+                        <span class="command-tag">functions</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">13</div>
+                    <h3 class="topic-title">User Management</h3>
+                    <p class="topic-description">Manage users, groups, and privileges</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">useradd</span>
+                        <span class="command-tag">sudo</span>
+                        <span class="command-tag">passwd</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">14</div>
+                    <h3 class="topic-title">System Monitoring</h3>
+                    <p class="topic-description">Track performance and system resources</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">vmstat</span>
+                        <span class="command-tag">iostat</span>
+                        <span class="command-tag">lsof</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">15</div>
+                    <h3 class="topic-title">Systemd Services</h3>
+                    <p class="topic-description">Control system services and daemons</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">systemctl</span>
+                        <span class="command-tag">journalctl</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">16</div>
+                    <h3 class="topic-title">Advanced Text Processing</h3>
+                    <p class="topic-description">AWK, SED, and complex text transformations</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">awk</span>
+                        <span class="command-tag">sed</span>
+                        <span class="command-tag">grep -E</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">17</div>
+                    <h3 class="topic-title">Cron & Scheduling</h3>
+                    <p class="topic-description">Automate recurring tasks with cron jobs</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">crontab</span>
+                        <span class="command-tag">at</span>
+                        <span class="command-tag">anacron</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Enterprise Level -->
+        <section id="enterprise" class="level-section level-enterprise">
+            <div class="level-header">
+                <span class="level-badge">LEVEL 4</span>
+                <h2 class="level-title">Enterprise / Professional</h2>
+            </div>
+            <div class="topics-grid">
+                <div class="topic-card">
+                    <div class="topic-number">18</div>
+                    <h3 class="topic-title">Package Management</h3>
+                    <p class="topic-description">APT, YUM, DNF - manage software packages</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">apt</span>
+                        <span class="command-tag">yum</span>
+                        <span class="command-tag">dnf</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">19</div>
+                    <h3 class="topic-title">SSH & Remote Access</h3>
+                    <p class="topic-description">Secure remote connections and file transfers</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">ssh</span>
+                        <span class="command-tag">ssh-keygen</span>
+                        <span class="command-tag">rsync</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">20</div>
+                    <h3 class="topic-title">Docker & Containers</h3>
+                    <p class="topic-description">Container orchestration and management</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">docker</span>
+                        <span class="command-tag">docker-compose</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">21</div>
+                    <h3 class="topic-title">Git Version Control</h3>
+                    <p class="topic-description">Source code management and collaboration</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">git</span>
+                        <span class="command-tag">commit</span>
+                        <span class="command-tag">push</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">22</div>
+                    <h3 class="topic-title">Web Servers</h3>
+                    <p class="topic-description">Nginx, Apache configuration and management</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">nginx</span>
+                        <span class="command-tag">apache</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">23</div>
+                    <h3 class="topic-title">Database Management</h3>
+                    <p class="topic-description">MySQL, PostgreSQL administration</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">mysql</span>
+                        <span class="command-tag">psql</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">24</div>
+                    <h3 class="topic-title">Firewall & Security</h3>
+                    <p class="topic-description">UFW, firewalld, iptables, SELinux</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">ufw</span>
+                        <span class="command-tag">firewalld</span>
+                        <span class="command-tag">iptables</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">25</div>
+                    <h3 class="topic-title">Kubernetes Basics</h3>
+                    <p class="topic-description">Container orchestration at scale</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">kubectl</span>
+                        <span class="command-tag">pods</span>
+                        <span class="command-tag">services</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">26</div>
+                    <h3 class="topic-title">Infrastructure as Code</h3>
+                    <p class="topic-description">Terraform, Ansible automation</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">terraform</span>
+                        <span class="command-tag">ansible</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">27</div>
+                    <h3 class="topic-title">Log Management</h3>
+                    <p class="topic-description">Centralized logging and analysis</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">journalctl</span>
+                        <span class="command-tag">logrotate</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">28</div>
+                    <h3 class="topic-title">Performance Tuning</h3>
+                    <p class="topic-description">System optimization and troubleshooting</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">perf</span>
+                        <span class="command-tag">sysctl</span>
+                        <span class="command-tag">strace</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">29</div>
+                    <h3 class="topic-title">Backup & Recovery</h3>
+                    <p class="topic-description">Data protection and disaster recovery</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">rsync</span>
+                        <span class="command-tag">dd</span>
+                        <span class="command-tag">lvm</span>
+                    </div>
+                </div>
+                
+                <div class="topic-card">
+                    <div class="topic-number">30</div>
+                    <h3 class="topic-title">High Availability</h3>
+                    <p class="topic-description">Load balancing and clustering</p>
+                    <div class="topic-commands">
+                        <span class="command-tag">haproxy</span>
+                        <span class="command-tag">pacemaker</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Quick Reference -->
+        <div class="command-showcase">
+            <h2 style="font-family: 'JetBrains Mono', monospace; color: var(--terminal-green); margin-bottom: 1.5rem;">Essential Commands</h2>
+            <div class="command-grid">
+                <div class="command-item">
+                    <span class="command-name">ls -lah</span><br>
+                    <span class="command-desc">List all files with details</span>
+                </div>
+                <div class="command-item">
+                    <span class="command-name">cd /path</span><br>
+                    <span class="command-desc">Change directory</span>
+                </div>
+                <div class="command-item">
+                    <span class="command-name">grep -r "text"</span><br>
+                    <span class="command-desc">Recursive search</span>
+                </div>
+                <div class="command-item">
+                    <span class="command-name">ps aux</span><br>
+                    <span class="command-desc">All processes</span>
+                </div>
+                <div class="command-item">
+                    <span class="command-name">df -h</span><br>
+                    <span class="command-desc">Disk usage</span>
+                </div>
+                <div class="command-item">
+                    <span class="command-name">systemctl status</span><br>
+                    <span class="command-desc">Service status</span>
+                </div>
+                <div class="command-item">
+                    <span class="command-name">docker ps</span><br>
+                    <span class="command-desc">List containers</span>
+                </div>
+                <div class="command-item">
+                    <span class="command-name">git status</span><br>
+                    <span class="command-desc">Repo status</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Learning Path -->
+        <section id="learning-path" class="learning-path">
+            <h2>Recommended Learning Path</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">Week 1-2</div>
+                    <div class="timeline-content">
+                        <h3>Beginner Foundations</h3>
+                        <p>Focus on navigation, file operations, and permissions. Practice daily navigation, file operations, and reading documentation.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker">Week 3-4</div>
+                    <div class="timeline-content">
+                        <h3>Intermediate Skills</h3>
+                        <p>Master text processing, pipes, process management. Build small shell scripts and practice text manipulation.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker">Month 2</div>
+                    <div class="timeline-content">
+                        <h3>Advanced Techniques</h3>
+                        <p>Dive into scripting, system monitoring, and service management. Write automation scripts and configure services.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-marker">Month 3+</div>
+                    <div class="timeline-content">
+                        <h3>Enterprise/Professional</h3>
+                        <p>Work with Docker, Kubernetes, Infrastructure as Code. Set up lab environments and simulate production scenarios.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Resources -->
+        <section id="resources" style="margin-top: 4rem;">
+            <h2 style="font-family: 'JetBrains Mono', monospace; font-size: 2.5rem; color: var(--terminal-cyan); margin-bottom: 2rem;">Additional Resources</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div style="background: var(--terminal-gray); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                    <h3 style="color: var(--terminal-green); font-family: 'JetBrains Mono', monospace; margin-bottom: 0.5rem;">Linux Journey</h3>
+                    <p style="color: var(--terminal-light);">Interactive learning platform for Linux fundamentals</p>
+                </div>
+                
+                <div style="background: var(--terminal-gray); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                    <h3 style="color: var(--terminal-green); font-family: 'JetBrains Mono', monospace; margin-bottom: 0.5rem;">OverTheWire</h3>
+                    <p style="color: var(--terminal-light);">Wargames for learning security and Linux skills</p>
+                </div>
+                
+                <div style="background: var(--terminal-gray); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                    <h3 style="color: var(--terminal-green); font-family: 'JetBrains Mono', monospace; margin-bottom: 0.5rem;">Man Pages</h3>
+                    <p style="color: var(--terminal-light);">Always use 'man command' for detailed documentation</p>
+                </div>
+                
+                <div style="background: var(--terminal-gray); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                    <h3 style="color: var(--terminal-green); font-family: 'JetBrains Mono', monospace; margin-bottom: 0.5rem;">Practice Labs</h3>
+                    <p style="color: var(--terminal-light);">Set up VirtualBox/VMware environments for safe experimentation</p>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <p>Linux Mastery Guide - Your Path from Beginner to Enterprise Professional</p>
+        <p style="margin-top: 1rem; font-size: 0.9rem;">💡 Practice daily • 🔧 Break things safely • 📚 Read the docs • 🚀 Build projects</p>
+        <div class="footer-links">
+            <a href="https://github.com/yourusername/linux-mastery-guide">GitHub Repository</a>
+            <a href="linux-mastery-guide.md" download>Download Full Guide</a>
+        </div>
+        <p style="margin-top: 2rem; font-size: 0.85rem; color: #555;">Last Updated: March 2026 | MIT License</p>
+    </footer>
+    
+    <button class="scroll-top" id="scrollTop">↑</button>
+    
+    <script>
+        // Scroll to top button
+        const scrollTopBtn = document.getElementById('scrollTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+        
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // Smooth scroll for navigation links
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+        
+        // Add animation on scroll for topic cards
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.topic-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.5s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
