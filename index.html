@@ -537,6 +537,176 @@
             background: var(--terminal-cyan);
             transform: translateY(-5px);
         }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 14, 20, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .modal-content {
+            background: var(--terminal-gray);
+            border: 2px solid var(--terminal-green);
+            border-radius: 12px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 20px 60px rgba(12, 206, 107, 0.3);
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            padding: 2rem;
+            border-bottom: 2px solid var(--terminal-green);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: var(--terminal-gray);
+            z-index: 10;
+        }
+        
+        .modal-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            color: var(--terminal-green);
+        }
+        
+        .modal-close {
+            background: var(--terminal-red);
+            color: var(--terminal-white);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .modal-close:hover {
+            background: var(--terminal-white);
+            color: var(--terminal-red);
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 2rem;
+        }
+        
+        .modal-section {
+            margin-bottom: 2rem;
+        }
+        
+        .modal-section h3 {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--terminal-cyan);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 217, 255, 0.3);
+            padding-bottom: 0.5rem;
+        }
+        
+        .modal-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .modal-section li {
+            color: var(--terminal-light);
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .modal-section li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--terminal-green);
+        }
+        
+        .command-block {
+            background: rgba(10, 14, 20, 0.8);
+            border-left: 4px solid var(--terminal-green);
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: auto;
+        }
+        
+        .command-line {
+            display: flex;
+            gap: 1rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .command-line:last-child {
+            border-bottom: none;
+        }
+        
+        .cmd {
+            color: var(--terminal-green);
+            font-weight: 600;
+            min-width: 200px;
+            flex-shrink: 0;
+        }
+        
+        .cmd-desc {
+            color: var(--terminal-light);
+            flex: 1;
+        }
+        
+        .note-box {
+            background: rgba(255, 204, 0, 0.1);
+            border-left: 4px solid var(--terminal-yellow);
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+        }
+        
+        .note-box strong {
+            color: var(--terminal-yellow);
+            font-family: 'JetBrains Mono', monospace;
+        }
     </style>
 </head>
 <body>
@@ -563,7 +733,7 @@
                 <h2 class="level-title">Beginner</h2>
             </div>
             <div class="topics-grid">
-                <div class="topic-card">
+                <div class="topic-card" data-topic="file-nav">
                     <div class="topic-number">01</div>
                     <h3 class="topic-title">File System Navigation</h3>
                     <p class="topic-description">Master Linux directory structure and navigation</p>
@@ -575,7 +745,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="file-ops">
                     <div class="topic-number">02</div>
                     <h3 class="topic-title">File Operations</h3>
                     <p class="topic-description">Create, copy, move, and delete files/directories</p>
@@ -588,7 +758,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="file-view">
                     <div class="topic-number">03</div>
                     <h3 class="topic-title">Viewing & Editing Files</h3>
                     <p class="topic-description">Inspect and edit file contents efficiently</p>
@@ -601,7 +771,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="permissions">
                     <div class="topic-number">04</div>
                     <h3 class="topic-title">File Permissions</h3>
                     <p class="topic-description">Understand and manage user, group, and other permissions</p>
@@ -612,7 +782,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="help">
                     <div class="topic-number">05</div>
                     <h3 class="topic-title">Getting Help</h3>
                     <p class="topic-description">Access documentation and command information</p>
@@ -633,7 +803,7 @@
                 <h2 class="level-title">Intermediate</h2>
             </div>
             <div class="topics-grid">
-                <div class="topic-card">
+                <div class="topic-card" data-topic="text-process">
                     <div class="topic-number">06</div>
                     <h3 class="topic-title">Text Processing & Search</h3>
                     <p class="topic-description">Pattern matching, regex, and text manipulation</p>
@@ -645,7 +815,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="redirection">
                     <div class="topic-number">07</div>
                     <h3 class="topic-title">Redirection & Pipes</h3>
                     <p class="topic-description">Chain commands and manage input/output streams</p>
@@ -657,7 +827,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="processes">
                     <div class="topic-number">08</div>
                     <h3 class="topic-title">Process Management</h3>
                     <p class="topic-description">Monitor, control, and manage system processes</p>
@@ -669,7 +839,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="disk">
                     <div class="topic-number">09</div>
                     <h3 class="topic-title">Disk Management</h3>
                     <p class="topic-description">Monitor disk usage and filesystem operations</p>
@@ -681,7 +851,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="network">
                     <div class="topic-number">10</div>
                     <h3 class="topic-title">Network Basics</h3>
                     <p class="topic-description">Network interfaces, connectivity, and file transfer</p>
@@ -693,7 +863,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="archives">
                     <div class="topic-number">11</div>
                     <h3 class="topic-title">Archives & Compression</h3>
                     <p class="topic-description">Create and extract compressed archives</p>
@@ -714,7 +884,7 @@
                 <h2 class="level-title">Advanced</h2>
             </div>
             <div class="topics-grid">
-                <div class="topic-card">
+                <div class="topic-card" data-topic="scripting">
                     <div class="topic-number">12</div>
                     <h3 class="topic-title">Shell Scripting</h3>
                     <p class="topic-description">Automate tasks with Bash scripts</p>
@@ -725,7 +895,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="users">
                     <div class="topic-number">13</div>
                     <h3 class="topic-title">User Management</h3>
                     <p class="topic-description">Manage users, groups, and privileges</p>
@@ -736,7 +906,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="monitoring">
                     <div class="topic-number">14</div>
                     <h3 class="topic-title">System Monitoring</h3>
                     <p class="topic-description">Track performance and system resources</p>
@@ -747,7 +917,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="systemd">
                     <div class="topic-number">15</div>
                     <h3 class="topic-title">Systemd Services</h3>
                     <p class="topic-description">Control system services and daemons</p>
@@ -757,7 +927,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="advanced-text">
                     <div class="topic-number">16</div>
                     <h3 class="topic-title">Advanced Text Processing</h3>
                     <p class="topic-description">AWK, SED, and complex text transformations</p>
@@ -768,7 +938,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="cron">
                     <div class="topic-number">17</div>
                     <h3 class="topic-title">Cron & Scheduling</h3>
                     <p class="topic-description">Automate recurring tasks with cron jobs</p>
@@ -788,7 +958,7 @@
                 <h2 class="level-title">Enterprise / Professional</h2>
             </div>
             <div class="topics-grid">
-                <div class="topic-card">
+                <div class="topic-card" data-topic="packages">
                     <div class="topic-number">18</div>
                     <h3 class="topic-title">Package Management</h3>
                     <p class="topic-description">APT, YUM, DNF - manage software packages</p>
@@ -799,7 +969,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="ssh">
                     <div class="topic-number">19</div>
                     <h3 class="topic-title">SSH & Remote Access</h3>
                     <p class="topic-description">Secure remote connections and file transfers</p>
@@ -810,7 +980,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="docker">
                     <div class="topic-number">20</div>
                     <h3 class="topic-title">Docker & Containers</h3>
                     <p class="topic-description">Container orchestration and management</p>
@@ -820,7 +990,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="git">
                     <div class="topic-number">21</div>
                     <h3 class="topic-title">Git Version Control</h3>
                     <p class="topic-description">Source code management and collaboration</p>
@@ -831,7 +1001,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="webservers">
                     <div class="topic-number">22</div>
                     <h3 class="topic-title">Web Servers</h3>
                     <p class="topic-description">Nginx, Apache configuration and management</p>
@@ -841,7 +1011,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="databases">
                     <div class="topic-number">23</div>
                     <h3 class="topic-title">Database Management</h3>
                     <p class="topic-description">MySQL, PostgreSQL administration</p>
@@ -851,7 +1021,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="firewall">
                     <div class="topic-number">24</div>
                     <h3 class="topic-title">Firewall & Security</h3>
                     <p class="topic-description">UFW, firewalld, iptables, SELinux</p>
@@ -862,7 +1032,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="kubernetes">
                     <div class="topic-number">25</div>
                     <h3 class="topic-title">Kubernetes Basics</h3>
                     <p class="topic-description">Container orchestration at scale</p>
@@ -873,7 +1043,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="iac">
                     <div class="topic-number">26</div>
                     <h3 class="topic-title">Infrastructure as Code</h3>
                     <p class="topic-description">Terraform, Ansible automation</p>
@@ -883,7 +1053,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="logs">
                     <div class="topic-number">27</div>
                     <h3 class="topic-title">Log Management</h3>
                     <p class="topic-description">Centralized logging and analysis</p>
@@ -893,7 +1063,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="performance">
                     <div class="topic-number">28</div>
                     <h3 class="topic-title">Performance Tuning</h3>
                     <p class="topic-description">System optimization and troubleshooting</p>
@@ -904,7 +1074,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="backup">
                     <div class="topic-number">29</div>
                     <h3 class="topic-title">Backup & Recovery</h3>
                     <p class="topic-description">Data protection and disaster recovery</p>
@@ -915,7 +1085,7 @@
                     </div>
                 </div>
                 
-                <div class="topic-card">
+                <div class="topic-card" data-topic="ha">
                     <div class="topic-number">30</div>
                     <h3 class="topic-title">High Availability</h3>
                     <p class="topic-description">Load balancing and clustering</p>
@@ -1031,11 +1201,24 @@
         </section>
     </div>
     
+    <!-- Modal for topic details -->
+    <div class="modal" id="topicModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Topic Details</h2>
+                <button class="modal-close" id="closeModal">×</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+    
     <footer>
         <p>Linux Mastery Guide - Your Path from Beginner to Enterprise Professional</p>
         <p style="margin-top: 1rem; font-size: 0.9rem;">💡 Practice daily • 🔧 Break things safely • 📚 Read the docs • 🚀 Build projects</p>
         <div class="footer-links">
-            <a href="https://github.com/cmdnos/linux-mastery-guide">GitHub Repository</a>
+            <a href="https://github.com/yourusername/linux-mastery-guide">GitHub Repository</a>
             <a href="linux-mastery-guide.md" download>Download Full Guide</a>
         </div>
         <p style="margin-top: 2rem; font-size: 0.85rem; color: #555;">Last Updated: March 2026 | MIT License</p>
@@ -1044,6 +1227,725 @@
     <button class="scroll-top" id="scrollTop">↑</button>
     
     <script>
+        // Topic data with detailed information - ALL 30 TOPICS
+        const topicData = {
+            'file-nav': {
+                title: '01. File System Navigation',
+                concepts: [
+                    'Linux directory structure (/, /home, /etc, /var, /usr, /bin)',
+                    'Absolute vs relative paths',
+                    'Current working directory',
+                    'Hidden files (files starting with .)'
+                ],
+                commands: [
+                    { cmd: 'pwd', desc: 'Print working directory' },
+                    { cmd: 'ls', desc: 'List files and directories' },
+                    { cmd: 'ls -la', desc: 'List all files with details (including hidden)' },
+                    { cmd: 'ls -lh', desc: 'List with human-readable file sizes' },
+                    { cmd: 'cd /path/to/directory', desc: 'Change directory' },
+                    { cmd: 'cd ..', desc: 'Go up one directory' },
+                    { cmd: 'cd ~', desc: 'Go to home directory' },
+                    { cmd: 'cd -', desc: 'Go to previous directory' },
+                    { cmd: 'tree', desc: 'Display directory tree structure' }
+                ],
+                notes: 'The Linux filesystem is hierarchical, starting from root (/). Understanding absolute paths (starting with /) vs relative paths (relative to current directory) is fundamental to navigation.'
+            },
+            'file-ops': {
+                title: '02. File and Directory Operations',
+                concepts: [
+                    'Creating, copying, moving, and deleting files/directories',
+                    'File naming conventions',
+                    'Directory hierarchy'
+                ],
+                commands: [
+                    { cmd: 'mkdir dirname', desc: 'Create directory' },
+                    { cmd: 'mkdir -p path/to/dirname', desc: 'Create nested directories' },
+                    { cmd: 'touch filename', desc: 'Create empty file or update timestamp' },
+                    { cmd: 'cp source dest', desc: 'Copy file' },
+                    { cmd: 'cp -r source dest', desc: 'Copy directory recursively' },
+                    { cmd: 'mv source dest', desc: 'Move or rename file/directory' },
+                    { cmd: 'rm filename', desc: 'Remove file' },
+                    { cmd: 'rm -r dirname', desc: 'Remove directory recursively' },
+                    { cmd: 'rm -rf dirname', desc: 'Force remove directory (use carefully!)' },
+                    { cmd: 'rmdir dirname', desc: 'Remove empty directory' }
+                ],
+                notes: 'Be extremely careful with rm -rf as it permanently deletes files without confirmation. Always double-check paths before executing destructive commands.'
+            },
+            'file-view': {
+                title: '03. Viewing and Editing Files',
+                concepts: [
+                    'Text viewers vs editors',
+                    'Standard input/output',
+                    'File content inspection'
+                ],
+                commands: [
+                    { cmd: 'cat filename', desc: 'Display entire file content' },
+                    { cmd: 'less filename', desc: 'View file with pagination (q to quit)' },
+                    { cmd: 'more filename', desc: 'View file page by page' },
+                    { cmd: 'head filename', desc: 'Show first 10 lines' },
+                    { cmd: 'head -n 20 filename', desc: 'Show first 20 lines' },
+                    { cmd: 'tail filename', desc: 'Show last 10 lines' },
+                    { cmd: 'tail -f filename', desc: 'Follow file in real-time (for logs)' },
+                    { cmd: 'nano filename', desc: 'Simple text editor' },
+                    { cmd: 'vim filename', desc: 'Advanced text editor' }
+                ],
+                notes: 'Use tail -f for monitoring log files in real-time. less is preferred over cat for large files as it provides pagination.'
+            },
+            'permissions': {
+                title: '04. File Permissions',
+                concepts: [
+                    'User, Group, Others (UGO)',
+                    'Read (r=4), Write (w=2), Execute (x=1)',
+                    'Numeric and symbolic notation',
+                    'Ownership'
+                ],
+                commands: [
+                    { cmd: 'ls -l', desc: 'View permissions' },
+                    { cmd: 'chmod 755 filename', desc: 'Set permissions (rwxr-xr-x)' },
+                    { cmd: 'chmod u+x filename', desc: 'Add execute permission for user' },
+                    { cmd: 'chmod -R 644 dirname', desc: 'Recursively set permissions' },
+                    { cmd: 'chown user:group filename', desc: 'Change owner and group' },
+                    { cmd: 'chown -R user dirname', desc: 'Recursively change owner' }
+                ],
+                notes: 'Common permissions: 777 (rwxrwxrwx) = all permissions, 755 (rwxr-xr-x) = owner full/others read-execute, 644 (rw-r--r--) = owner read-write/others read-only, 600 (rw-------) = owner only.'
+            },
+            'help': {
+                title: '05. Getting Help',
+                concepts: [
+                    'Manual pages',
+                    'Command documentation',
+                    'Built-in help'
+                ],
+                commands: [
+                    { cmd: 'man command', desc: 'View manual page for command' },
+                    { cmd: 'man -k keyword', desc: 'Search manual pages' },
+                    { cmd: 'command --help', desc: 'Display command help' },
+                    { cmd: 'whatis command', desc: 'Brief description of command' },
+                    { cmd: 'apropos keyword', desc: 'Search command descriptions' },
+                    { cmd: 'info command', desc: 'Detailed information' }
+                ],
+                notes: 'man pages are your best friend! Navigate with arrow keys, search with /, and quit with q. The --help flag works for most commands.'
+            },
+            'text-process': {
+                title: '06. Text Processing & Search',
+                concepts: [
+                    'Pattern matching',
+                    'Regular expressions basics',
+                    'Text streams and pipelines'
+                ],
+                commands: [
+                    { cmd: 'grep "pattern" filename', desc: 'Search for pattern in file' },
+                    { cmd: 'grep -r "pattern" directory', desc: 'Recursive search' },
+                    { cmd: 'grep -i "pattern" filename', desc: 'Case-insensitive search' },
+                    { cmd: 'grep -v "pattern" filename', desc: 'Invert match (exclude pattern)' },
+                    { cmd: 'grep -n "pattern" filename', desc: 'Show line numbers' },
+                    { cmd: 'find /path -name "*.txt"', desc: 'Find files by name' },
+                    { cmd: 'find /path -type f', desc: 'Find files only' },
+                    { cmd: 'find /path -mtime -7', desc: 'Files modified in last 7 days' },
+                    { cmd: 'wc -l filename', desc: 'Count lines only' },
+                    { cmd: 'sort filename', desc: 'Sort lines' },
+                    { cmd: 'uniq filename', desc: 'Remove duplicate lines' },
+                    { cmd: 'cut -d\',\' -f1 file.csv', desc: 'Extract column from CSV' }
+                ],
+                notes: 'grep is one of the most powerful text search tools. Combine it with pipes for complex filtering operations.'
+            },
+            'redirection': {
+                title: '07. Redirection & Pipes',
+                concepts: [
+                    'Standard streams (stdin, stdout, stderr)',
+                    'Redirection operators',
+                    'Pipelines for command chaining'
+                ],
+                commands: [
+                    { cmd: 'command > file', desc: 'Redirect output to file (overwrite)' },
+                    { cmd: 'command >> file', desc: 'Redirect output to file (append)' },
+                    { cmd: 'command 2> file', desc: 'Redirect errors to file' },
+                    { cmd: 'command &> file', desc: 'Redirect both output and errors' },
+                    { cmd: 'command1 | command2', desc: 'Pipe output to next command' },
+                    { cmd: 'command < file', desc: 'Use file as input' },
+                    { cmd: 'command1 | tee file | command2', desc: 'Write to file and pass to next' }
+                ],
+                notes: 'Pipes (|) are extremely powerful for chaining commands. Example: grep "error" log.txt | wc -l counts error lines in a log file.'
+            },
+            'processes': {
+                title: '08. Process Management',
+                concepts: [
+                    'Processes and PIDs',
+                    'Foreground vs background processes',
+                    'Process states',
+                    'Signals'
+                ],
+                commands: [
+                    { cmd: 'ps', desc: 'Show current user processes' },
+                    { cmd: 'ps aux', desc: 'Show all processes' },
+                    { cmd: 'ps -ef', desc: 'Show all processes (alternative format)' },
+                    { cmd: 'top', desc: 'Interactive process viewer' },
+                    { cmd: 'htop', desc: 'Enhanced interactive process viewer' },
+                    { cmd: 'pgrep process_name', desc: 'Find process ID by name' },
+                    { cmd: 'kill PID', desc: 'Terminate process' },
+                    { cmd: 'kill -9 PID', desc: 'Force kill process' },
+                    { cmd: 'killall process_name', desc: 'Kill all processes by name' },
+                    { cmd: 'bg', desc: 'Resume process in background' },
+                    { cmd: 'fg', desc: 'Bring process to foreground' },
+                    { cmd: 'command &', desc: 'Run command in background' }
+                ],
+                notes: 'Use kill -9 (SIGKILL) only as a last resort. Try kill (SIGTERM) first to allow graceful shutdown.'
+            },
+            'disk': {
+                title: '09. Disk Usage & Management',
+                concepts: [
+                    'Disk space monitoring',
+                    'Filesystem types',
+                    'Mount points',
+                    'Partitions'
+                ],
+                commands: [
+                    { cmd: 'df -h', desc: 'Disk space usage (human-readable)' },
+                    { cmd: 'df -i', desc: 'Inode usage' },
+                    { cmd: 'du -h directory', desc: 'Directory size' },
+                    { cmd: 'du -sh directory', desc: 'Summary of directory size' },
+                    { cmd: 'du -h --max-depth=1', desc: 'Size of subdirectories one level deep' },
+                    { cmd: 'lsblk', desc: 'List block devices' },
+                    { cmd: 'mount', desc: 'Show mounted filesystems' },
+                    { cmd: 'mount /dev/sdb1 /mnt', desc: 'Mount device' },
+                    { cmd: 'umount /mnt', desc: 'Unmount filesystem' }
+                ],
+                notes: 'Always check df -h when running out of disk space. Use du -sh */ to find which directories are consuming the most space.'
+            },
+            'network': {
+                title: '10. Network Basics',
+                concepts: [
+                    'IP addressing',
+                    'Network interfaces',
+                    'Ports and services',
+                    'DNS'
+                ],
+                commands: [
+                    { cmd: 'ip addr', desc: 'Show IP addresses' },
+                    { cmd: 'ip link', desc: 'Show network devices' },
+                    { cmd: 'ping hostname', desc: 'Test connectivity' },
+                    { cmd: 'ping -c 4 hostname', desc: 'Ping 4 times' },
+                    { cmd: 'traceroute hostname', desc: 'Trace route to host' },
+                    { cmd: 'netstat -tuln', desc: 'Show listening ports' },
+                    { cmd: 'ss -tuln', desc: 'Show listening ports (modern)' },
+                    { cmd: 'nslookup domain', desc: 'DNS lookup' },
+                    { cmd: 'dig domain', desc: 'DNS lookup (detailed)' },
+                    { cmd: 'curl url', desc: 'Transfer data from URL' },
+                    { cmd: 'wget url', desc: 'Download file from URL' },
+                    { cmd: 'scp file user@host:/path', desc: 'Secure copy to remote host' }
+                ],
+                notes: 'ss is the modern replacement for netstat. Use curl -I to fetch HTTP headers only.'
+            },
+            'archives': {
+                title: '11. Archive & Compression',
+                concepts: [
+                    'Tar archives',
+                    'Compression algorithms (gzip, bzip2, xz)',
+                    'Archive vs compression'
+                ],
+                commands: [
+                    { cmd: 'tar -cvf archive.tar files', desc: 'Create tar archive' },
+                    { cmd: 'tar -xvf archive.tar', desc: 'Extract tar archive' },
+                    { cmd: 'tar -czvf archive.tar.gz files', desc: 'Create gzip archive' },
+                    { cmd: 'tar -xzvf archive.tar.gz', desc: 'Extract gzip archive' },
+                    { cmd: 'tar -cjvf archive.tar.bz2 files', desc: 'Create bzip2 archive' },
+                    { cmd: 'gzip file', desc: 'Compress file' },
+                    { cmd: 'gunzip file.gz', desc: 'Decompress file' },
+                    { cmd: 'zip archive.zip files', desc: 'Create zip archive' },
+                    { cmd: 'unzip archive.zip', desc: 'Extract zip archive' }
+                ],
+                notes: 'Tar flags: c=create, x=extract, v=verbose, f=file, z=gzip, j=bzip2. Common combo: tar -xzvf for extraction.'
+            },
+            'scripting': {
+                title: '12. Shell Scripting',
+                concepts: [
+                    'Bash scripting basics',
+                    'Variables and parameters',
+                    'Conditionals and loops',
+                    'Functions and exit codes'
+                ],
+                commands: [
+                    { cmd: '#!/bin/bash', desc: 'Shebang line' },
+                    { cmd: 'variable="value"', desc: 'Assign variable' },
+                    { cmd: 'echo $variable', desc: 'Use variable' },
+                    { cmd: '$1, $2, $@', desc: 'Script arguments' },
+                    { cmd: '$?', desc: 'Exit status of last command' },
+                    { cmd: '[ -f file ]', desc: 'Test if file exists' },
+                    { cmd: '[ -d directory ]', desc: 'Test if directory exists' },
+                    { cmd: 'if [ condition ]; then...fi', desc: 'Conditional statement' },
+                    { cmd: 'for item in list; do...done', desc: 'For loop' },
+                    { cmd: 'while [ condition ]; do...done', desc: 'While loop' }
+                ],
+                notes: 'Always start scripts with #!/bin/bash. Use set -e to exit on first error. Test scripts with bash -x script.sh for debugging.'
+            },
+            'users': {
+                title: '13. User & Group Management',
+                concepts: [
+                    'User accounts',
+                    'Groups and permissions',
+                    'sudo and privilege escalation',
+                    'PAM (Pluggable Authentication Modules)'
+                ],
+                commands: [
+                    { cmd: 'whoami', desc: 'Current username' },
+                    { cmd: 'id', desc: 'User and group IDs' },
+                    { cmd: 'w', desc: 'Who is logged in and what they\'re doing' },
+                    { cmd: 'last', desc: 'Login history' },
+                    { cmd: 'sudo command', desc: 'Execute command as superuser' },
+                    { cmd: 'sudo -i', desc: 'Start root shell' },
+                    { cmd: 'useradd username', desc: 'Create user' },
+                    { cmd: 'usermod -aG group user', desc: 'Add user to group' },
+                    { cmd: 'userdel username', desc: 'Delete user' },
+                    { cmd: 'passwd username', desc: 'Change user password' },
+                    { cmd: 'groupadd groupname', desc: 'Create group' },
+                    { cmd: 'groups username', desc: 'Show user\'s groups' }
+                ],
+                notes: 'Always use sudo instead of logging in as root. Add users to sudo/wheel group for admin privileges.'
+            },
+            'monitoring': {
+                title: '14. System Monitoring & Performance',
+                concepts: [
+                    'System resources (CPU, RAM, I/O)',
+                    'Load average',
+                    'Performance bottlenecks',
+                    'System logs'
+                ],
+                commands: [
+                    { cmd: 'uptime', desc: 'System uptime and load' },
+                    { cmd: 'free -h', desc: 'Memory usage' },
+                    { cmd: 'vmstat', desc: 'Virtual memory statistics' },
+                    { cmd: 'vmstat 1', desc: 'Update every second' },
+                    { cmd: 'iostat', desc: 'CPU and I/O statistics' },
+                    { cmd: 'dmesg', desc: 'Kernel ring buffer messages' },
+                    { cmd: 'journalctl', desc: 'Systemd journal' },
+                    { cmd: 'journalctl -u service', desc: 'Logs for specific service' },
+                    { cmd: 'journalctl -f', desc: 'Follow journal in real-time' },
+                    { cmd: 'lsof', desc: 'List open files' },
+                    { cmd: 'lsof -i :80', desc: 'Show what\'s using port 80' },
+                    { cmd: 'strace command', desc: 'Trace system calls' }
+                ],
+                notes: 'Load average shows 1, 5, and 15-minute averages. Values > number of CPU cores indicate high load.'
+            },
+            'systemd': {
+                title: '15. Systemd & Service Management',
+                concepts: [
+                    'Init systems',
+                    'Service units',
+                    'Targets (runlevels)',
+                    'Service dependencies'
+                ],
+                commands: [
+                    { cmd: 'systemctl status service', desc: 'Service status' },
+                    { cmd: 'systemctl start service', desc: 'Start service' },
+                    { cmd: 'systemctl stop service', desc: 'Stop service' },
+                    { cmd: 'systemctl restart service', desc: 'Restart service' },
+                    { cmd: 'systemctl reload service', desc: 'Reload configuration' },
+                    { cmd: 'systemctl enable service', desc: 'Enable at boot' },
+                    { cmd: 'systemctl disable service', desc: 'Disable at boot' },
+                    { cmd: 'systemctl list-units', desc: 'List all units' },
+                    { cmd: 'systemctl daemon-reload', desc: 'Reload systemd configuration' },
+                    { cmd: 'journalctl -u service -f', desc: 'Follow service logs' }
+                ],
+                notes: 'Use systemctl enable to make services start on boot. Always run daemon-reload after modifying unit files.'
+            },
+            'advanced-text': {
+                title: '16. Advanced Text Processing',
+                concepts: [
+                    'AWK programming',
+                    'SED stream editing',
+                    'Regular expressions',
+                    'Text transformation'
+                ],
+                commands: [
+                    { cmd: 'sed \'s/old/new/\' file', desc: 'Replace first occurrence' },
+                    { cmd: 'sed \'s/old/new/g\' file', desc: 'Replace all occurrences' },
+                    { cmd: 'sed -i \'s/old/new/g\' file', desc: 'In-place replacement' },
+                    { cmd: 'sed -n \'10,20p\' file', desc: 'Print lines 10-20' },
+                    { cmd: 'awk \'{print $1}\' file', desc: 'Print first column' },
+                    { cmd: 'awk -F\',\' \'{print $2}\' file.csv', desc: 'CSV with custom delimiter' },
+                    { cmd: 'awk \'$3 > 100\' file', desc: 'Print lines where 3rd field > 100' },
+                    { cmd: 'awk \'{sum+=$1} END {print sum}\' file', desc: 'Sum first column' },
+                    { cmd: 'grep -E \'regex\' file', desc: 'Extended regex' },
+                    { cmd: 'grep -A 3 \'pattern\' file', desc: 'Show 3 lines after match' }
+                ],
+                notes: 'AWK is great for column-based data. SED excels at find-and-replace operations. Both support regex.'
+            },
+            'cron': {
+                title: '17. Cron Jobs & Scheduling',
+                concepts: [
+                    'Task scheduling',
+                    'Cron syntax',
+                    'Anacron for irregular schedules',
+                    'At for one-time tasks'
+                ],
+                commands: [
+                    { cmd: 'crontab -l', desc: 'List cron jobs' },
+                    { cmd: 'crontab -e', desc: 'Edit cron jobs' },
+                    { cmd: 'crontab -r', desc: 'Remove all cron jobs' },
+                    { cmd: '0 2 * * * /path/script', desc: 'Run at 2 AM daily' },
+                    { cmd: '*/5 * * * * /path/script', desc: 'Run every 5 minutes' },
+                    { cmd: '0 0 * * 0 /path/script', desc: 'Run weekly on Sunday' },
+                    { cmd: 'at now + 1 hour', desc: 'Schedule command in 1 hour' },
+                    { cmd: 'atq', desc: 'List scheduled at jobs' }
+                ],
+                notes: 'Cron syntax: minute hour day month weekday command. Use */N for "every N units". Redirect output to avoid email spam.'
+            },
+            'packages': {
+                title: '18. Package Management',
+                concepts: [
+                    'Package managers (apt, yum, dnf)',
+                    'Repositories',
+                    'Dependencies',
+                    'System updates'
+                ],
+                commands: [
+                    { cmd: 'apt update', desc: 'Update package list (Debian/Ubuntu)' },
+                    { cmd: 'apt upgrade', desc: 'Upgrade packages' },
+                    { cmd: 'apt install package', desc: 'Install package' },
+                    { cmd: 'apt remove package', desc: 'Remove package' },
+                    { cmd: 'apt search keyword', desc: 'Search packages' },
+                    { cmd: 'yum update', desc: 'Update packages (RHEL/CentOS)' },
+                    { cmd: 'yum install package', desc: 'Install package (RHEL)' },
+                    { cmd: 'dnf install package', desc: 'Install (Fedora/RHEL 8+)' },
+                    { cmd: 'dpkg -l', desc: 'List installed packages (Debian)' },
+                    { cmd: 'rpm -qa', desc: 'List installed packages (RHEL)' }
+                ],
+                notes: 'Always run apt update before apt install. Use apt autoremove to clean up unused dependencies.'
+            },
+            'ssh': {
+                title: '19. SSH & Remote Access',
+                concepts: [
+                    'Public key authentication',
+                    'SSH tunneling',
+                    'SSH config',
+                    'Jump hosts/bastion servers'
+                ],
+                commands: [
+                    { cmd: 'ssh user@hostname', desc: 'Connect to remote host' },
+                    { cmd: 'ssh -p 2222 user@hostname', desc: 'Connect on custom port' },
+                    { cmd: 'ssh-keygen', desc: 'Generate SSH key pair' },
+                    { cmd: 'ssh-keygen -t rsa -b 4096', desc: 'Generate 4096-bit RSA key' },
+                    { cmd: 'ssh-copy-id user@hostname', desc: 'Copy public key to remote' },
+                    { cmd: 'scp file user@host:/path', desc: 'Secure copy file' },
+                    { cmd: 'scp -r directory user@host:/path', desc: 'Copy directory' },
+                    { cmd: 'rsync -avz source/ dest/', desc: 'Sync directories' },
+                    { cmd: 'ssh -L 8080:localhost:80 user@host', desc: 'Local port forwarding' },
+                    { cmd: 'ssh -J jump_host target_host', desc: 'SSH through jump host' }
+                ],
+                notes: 'Use SSH keys instead of passwords for better security. Store SSH config in ~/.ssh/config for convenience.'
+            },
+            'docker': {
+                title: '20. Docker & Containers',
+                concepts: [
+                    'Containerization',
+                    'Images vs containers',
+                    'Dockerfile',
+                    'Container orchestration basics'
+                ],
+                commands: [
+                    { cmd: 'docker ps', desc: 'List running containers' },
+                    { cmd: 'docker ps -a', desc: 'List all containers' },
+                    { cmd: 'docker images', desc: 'List images' },
+                    { cmd: 'docker pull image:tag', desc: 'Pull image' },
+                    { cmd: 'docker run image', desc: 'Run container' },
+                    { cmd: 'docker run -d image', desc: 'Run in detached mode' },
+                    { cmd: 'docker run -p 8080:80 image', desc: 'Port mapping' },
+                    { cmd: 'docker exec -it container bash', desc: 'Execute command in container' },
+                    { cmd: 'docker logs -f container', desc: 'Follow container logs' },
+                    { cmd: 'docker stop container', desc: 'Stop container' },
+                    { cmd: 'docker build -t name:tag .', desc: 'Build image from Dockerfile' },
+                    { cmd: 'docker system prune', desc: 'Clean up unused resources' }
+                ],
+                notes: 'Use docker-compose for multi-container applications. Always tag your images with versions, not just "latest".'
+            },
+            'git': {
+                title: '21. Git Version Control',
+                concepts: [
+                    'Version control',
+                    'Branches and merging',
+                    'Remote repositories',
+                    'Collaboration workflows'
+                ],
+                commands: [
+                    { cmd: 'git init', desc: 'Initialize repository' },
+                    { cmd: 'git clone url', desc: 'Clone repository' },
+                    { cmd: 'git status', desc: 'Check status' },
+                    { cmd: 'git add file', desc: 'Stage file' },
+                    { cmd: 'git add .', desc: 'Stage all changes' },
+                    { cmd: 'git commit -m "message"', desc: 'Commit changes' },
+                    { cmd: 'git push origin branch', desc: 'Push to remote' },
+                    { cmd: 'git pull', desc: 'Pull from remote' },
+                    { cmd: 'git branch', desc: 'List branches' },
+                    { cmd: 'git checkout -b branch', desc: 'Create and switch branch' },
+                    { cmd: 'git merge branch', desc: 'Merge branch' },
+                    { cmd: 'git log --oneline', desc: 'Compact log' },
+                    { cmd: 'git stash', desc: 'Stash changes' }
+                ],
+                notes: 'Commit often with meaningful messages. Always pull before push to avoid conflicts. Use branches for features.'
+            },
+            'webservers': {
+                title: '22. Web Servers (Nginx/Apache)',
+                concepts: [
+                    'Web server configuration',
+                    'Virtual hosts',
+                    'Reverse proxy',
+                    'SSL/TLS certificates'
+                ],
+                commands: [
+                    { cmd: 'nginx -t', desc: 'Test Nginx configuration' },
+                    { cmd: 'nginx -s reload', desc: 'Reload Nginx configuration' },
+                    { cmd: 'systemctl restart nginx', desc: 'Restart Nginx service' },
+                    { cmd: 'apachectl configtest', desc: 'Test Apache configuration' },
+                    { cmd: 'systemctl restart apache2', desc: 'Restart Apache (Debian/Ubuntu)' },
+                    { cmd: 'systemctl restart httpd', desc: 'Restart Apache (RHEL/CentOS)' },
+                    { cmd: 'a2ensite sitename', desc: 'Enable site (Apache Debian)' },
+                    { cmd: 'a2enmod modulename', desc: 'Enable Apache module' }
+                ],
+                notes: 'Always test configuration (nginx -t or apachectl configtest) before reloading. Check error logs for troubleshooting.'
+            },
+            'databases': {
+                title: '23. Database Management',
+                concepts: [
+                    'Database servers',
+                    'SQL basics',
+                    'Backup and restore',
+                    'User permissions'
+                ],
+                commands: [
+                    { cmd: 'mysql -u user -p', desc: 'Connect to MySQL' },
+                    { cmd: 'mysqldump -u user -p dbname > backup.sql', desc: 'Backup MySQL database' },
+                    { cmd: 'mysql -u user -p dbname < backup.sql', desc: 'Restore MySQL database' },
+                    { cmd: 'psql -U user -d database', desc: 'Connect to PostgreSQL' },
+                    { cmd: 'pg_dump dbname > backup.sql', desc: 'Backup PostgreSQL database' },
+                    { cmd: 'psql dbname < backup.sql', desc: 'Restore PostgreSQL database' },
+                    { cmd: 'createdb dbname', desc: 'Create PostgreSQL database' }
+                ],
+                notes: 'Always backup databases before major changes. Use --single-transaction with mysqldump for consistent backups.'
+            },
+            'firewall': {
+                title: '24. Firewall & Security',
+                concepts: [
+                    'Firewall rules',
+                    'Port management',
+                    'SELinux/AppArmor',
+                    'Security hardening'
+                ],
+                commands: [
+                    { cmd: 'ufw status', desc: 'Check UFW firewall status' },
+                    { cmd: 'ufw enable', desc: 'Enable UFW firewall' },
+                    { cmd: 'ufw allow 22', desc: 'Allow SSH' },
+                    { cmd: 'ufw allow 80/tcp', desc: 'Allow HTTP' },
+                    { cmd: 'firewall-cmd --list-all', desc: 'List firewalld rules' },
+                    { cmd: 'firewall-cmd --add-port=80/tcp', desc: 'Add port (firewalld)' },
+                    { cmd: 'iptables -L', desc: 'List iptables rules' },
+                    { cmd: 'getenforce', desc: 'Check SELinux status' },
+                    { cmd: 'setenforce 0', desc: 'Set SELinux to permissive' }
+                ],
+                notes: 'Always allow SSH (port 22) before enabling firewall to avoid lockout. Use --permanent flag for persistent firewalld rules.'
+            },
+            'kubernetes': {
+                title: '25. Kubernetes Basics',
+                concepts: [
+                    'Container orchestration',
+                    'Pods, Services, Deployments',
+                    'kubectl CLI',
+                    'Cluster management'
+                ],
+                commands: [
+                    { cmd: 'kubectl get pods', desc: 'List pods' },
+                    { cmd: 'kubectl get pods -A', desc: 'List all pods (all namespaces)' },
+                    { cmd: 'kubectl get nodes', desc: 'List nodes' },
+                    { cmd: 'kubectl get services', desc: 'List services' },
+                    { cmd: 'kubectl describe pod podname', desc: 'Pod details' },
+                    { cmd: 'kubectl logs podname', desc: 'View pod logs' },
+                    { cmd: 'kubectl logs -f podname', desc: 'Follow pod logs' },
+                    { cmd: 'kubectl exec -it podname -- bash', desc: 'Execute in pod' },
+                    { cmd: 'kubectl apply -f manifest.yaml', desc: 'Apply configuration' },
+                    { cmd: 'kubectl scale deployment name --replicas=3', desc: 'Scale deployment' }
+                ],
+                notes: 'Use kubectl get events to troubleshoot issues. kubectl describe provides detailed information about resources.'
+            },
+            'iac': {
+                title: '26. Infrastructure as Code',
+                concepts: [
+                    'Configuration management',
+                    'Infrastructure provisioning',
+                    'Idempotency',
+                    'State management'
+                ],
+                commands: [
+                    { cmd: 'terraform init', desc: 'Initialize Terraform directory' },
+                    { cmd: 'terraform plan', desc: 'Preview Terraform changes' },
+                    { cmd: 'terraform apply', desc: 'Apply Terraform changes' },
+                    { cmd: 'terraform destroy', desc: 'Destroy Terraform infrastructure' },
+                    { cmd: 'terraform validate', desc: 'Validate Terraform configuration' },
+                    { cmd: 'ansible all -m ping', desc: 'Ping all Ansible hosts' },
+                    { cmd: 'ansible-playbook playbook.yml', desc: 'Run Ansible playbook' },
+                    { cmd: 'ansible-playbook playbook.yml --check', desc: 'Ansible dry run' }
+                ],
+                notes: 'Always run terraform plan before apply. Use version control for IaC files. Test with --check flag in Ansible.'
+            },
+            'logs': {
+                title: '27. Log Management & Analysis',
+                concepts: [
+                    'System logs',
+                    'Application logs',
+                    'Log rotation',
+                    'Centralized logging'
+                ],
+                commands: [
+                    { cmd: 'tail -f /var/log/syslog', desc: 'Follow system log' },
+                    { cmd: 'journalctl -f', desc: 'Follow systemd journal' },
+                    { cmd: 'journalctl -u service', desc: 'Service-specific logs' },
+                    { cmd: 'journalctl -p err', desc: 'Error priority and above' },
+                    { cmd: 'journalctl --since "1 hour ago"', desc: 'Logs from last hour' },
+                    { cmd: 'journalctl -b', desc: 'Current boot logs' },
+                    { cmd: 'journalctl --disk-usage', desc: 'Journal disk usage' },
+                    { cmd: 'logrotate /etc/logrotate.conf', desc: 'Rotate logs' },
+                    { cmd: 'zgrep "pattern" /var/log/syslog*', desc: 'Search compressed logs' }
+                ],
+                notes: 'Use journalctl --vacuum-time=7d to clean old logs. grep -E for regex patterns in log analysis.'
+            },
+            'performance': {
+                title: '28. Performance Tuning',
+                concepts: [
+                    'System bottlenecks',
+                    'Resource optimization',
+                    'Kernel parameters',
+                    'Performance profiling'
+                ],
+                commands: [
+                    { cmd: 'mpstat -P ALL 1', desc: 'Per-CPU statistics' },
+                    { cmd: 'pidstat 1', desc: 'Per-process statistics' },
+                    { cmd: 'perf top', desc: 'System profiling' },
+                    { cmd: 'iotop', desc: 'I/O usage by process' },
+                    { cmd: 'iostat -x 1', desc: 'Extended I/O statistics' },
+                    { cmd: 'iftop', desc: 'Network bandwidth by connection' },
+                    { cmd: 'tcpdump -i eth0', desc: 'Packet capture' },
+                    { cmd: 'sysctl -a', desc: 'List all kernel parameters' },
+                    { cmd: 'sysctl -p', desc: 'Reload sysctl.conf' },
+                    { cmd: 'ulimit -a', desc: 'Show resource limits' }
+                ],
+                notes: 'Use perf for CPU profiling. iotop helps identify I/O bottlenecks. Always test kernel parameter changes before making permanent.'
+            },
+            'backup': {
+                title: '29. Backup & Disaster Recovery',
+                concepts: [
+                    'Backup strategies (full, incremental, differential)',
+                    'Snapshot management',
+                    'Disaster recovery planning',
+                    'Data integrity'
+                ],
+                commands: [
+                    { cmd: 'rsync -avz --delete source/ dest/', desc: 'Mirror backup with rsync' },
+                    { cmd: 'tar -czf backup-$(date +%Y%m%d).tar.gz /path', desc: 'Create dated tar backup' },
+                    { cmd: 'dd if=/dev/sda of=/backup/disk.img bs=4M', desc: 'Disk imaging with dd' },
+                    { cmd: 'lvcreate -L 5G -s -n snap /dev/vg/lv', desc: 'Create LVM snapshot' },
+                    { cmd: 'md5sum file > file.md5', desc: 'Create checksum' },
+                    { cmd: 'sha256sum file', desc: 'SHA256 checksum' }
+                ],
+                notes: 'Follow 3-2-1 rule: 3 copies, 2 different media, 1 offsite. Always verify backups with checksums. Test restore procedures regularly.'
+            },
+            'ha': {
+                title: '30. High Availability & Clustering',
+                concepts: [
+                    'Load balancing',
+                    'Failover',
+                    'Cluster management',
+                    'Distributed systems'
+                ],
+                commands: [
+                    { cmd: 'systemctl status keepalived', desc: 'Check keepalived status' },
+                    { cmd: 'ip addr show | grep VIP', desc: 'Check virtual IP' },
+                    { cmd: 'haproxy -f /etc/haproxy/haproxy.cfg -c', desc: 'Check HAProxy config' },
+                    { cmd: 'systemctl reload haproxy', desc: 'Reload HAProxy config' },
+                    { cmd: 'pcs status', desc: 'Pacemaker cluster status' },
+                    { cmd: 'pcs cluster start --all', desc: 'Start Pacemaker cluster' },
+                    { cmd: 'etcdctl member list', desc: 'List etcd cluster members' },
+                    { cmd: 'etcdctl endpoint health', desc: 'Check etcd endpoint health' }
+                ],
+                notes: 'HA setups require careful planning. Test failover scenarios regularly. Monitor VIPs to ensure proper failover.'
+            }
+        };
+        
+        // Modal functionality
+        const modal = document.getElementById('topicModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        const closeModalBtn = document.getElementById('closeModal');
+        
+        function openModal(topicId) {
+            const data = topicData[topicId];
+            if (!data) return;
+            
+            modalTitle.textContent = data.title;
+            
+            let content = '<div class="modal-section">';
+            
+            // Concepts
+            content += '<h3>Key Concepts</h3><ul>';
+            data.concepts.forEach(concept => {
+                content += `<li>${concept}</li>`;
+            });
+            content += '</ul></div>';
+            
+            // Commands
+            content += '<div class="modal-section"><h3>Essential Commands</h3>';
+            content += '<div class="command-block">';
+            data.commands.forEach(cmd => {
+                content += `
+                    <div class="command-line">
+                        <div class="cmd">${cmd.cmd}</div>
+                        <div class="cmd-desc">${cmd.desc}</div>
+                    </div>
+                `;
+            });
+            content += '</div></div>';
+            
+            // Notes
+            if (data.notes) {
+                content += `
+                    <div class="modal-section">
+                        <div class="note-box">
+                            <strong>💡 Pro Tip:</strong> ${data.notes}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            modalBody.innerHTML = content;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Add click handlers to topic cards
+        document.querySelectorAll('.topic-card[data-topic]').forEach(card => {
+            card.addEventListener('click', function() {
+                const topicId = this.getAttribute('data-topic');
+                openModal(topicId);
+            });
+        });
+        
+        // Close modal handlers
+        closeModalBtn.addEventListener('click', closeModal);
+        
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+        
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+        
         // Scroll to top button
         const scrollTopBtn = document.getElementById('scrollTop');
         
